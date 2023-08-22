@@ -8,6 +8,9 @@ include env
 $(info $$DEVICEID is [${DEVICEID}])
 $(info $$HOMEID is [${HOMEID}])
 $(info $$BTOKEN is [${BTOKEN}])
+$(info $$RTOKEN is [${RTOKEN}])
+$(info $$CLIENTID is [${CLIENTID}])
+$(info $$CLIENTSECRET is [${CLIENTSECRET}])
 
 all:
 	go run *.go

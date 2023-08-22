@@ -40,3 +40,11 @@ type HomeStatus struct {
 		} `json:"home"`
 	} `json:"body"`
 }
+
+type AuthRefresh struct {
+	Scope        []string `json:"scope"`
+	AccessToken  string   `json:"access_token"`
+	RefreshToken string   `json:"refresh_token"`
+	ExpiresIn    int      `json:"expires_in"`
+	ExpireIn     int      `json:"expire_in"`
+}
