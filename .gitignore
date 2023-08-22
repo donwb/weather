@@ -1,0 +1,6 @@
+.env
+env
+settings.json
+run.log
+docker-env
+.DS_Store

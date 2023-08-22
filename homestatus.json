@@ -1,0 +1,56 @@
+{
+    "status": "ok",
+    "time_server": 1692641329,
+    "body": {
+        "home": {
+            "id": "64cb05b88237f502eb0b5949",
+            "modules": [
+                {
+                    "id": "70:ee:50:9c:f0:90",
+                    "type": "NAMain",
+                    "firmware_revision": 201,
+                    "wifi_state": "full",
+                    "wifi_strength": 54,
+                    "ts": 1692641286,
+                    "temperature": 22.7,
+                    "co2": 1105,
+                    "humidity": 45,
+                    "noise": 60,
+                    "pressure": 1017.9,
+                    "absolute_pressure": 1017.7
+                },
+                {
+                    "id": "02:00:00:a2:71:d6",
+                    "type": "NAModule1",
+                    "battery_state": "full",
+                    "battery_level": 6078,
+                    "firmware_revision": 53,
+                    "rf_state": "high",
+                    "rf_strength": 59,
+                    "last_seen": 1692641281,
+                    "reachable": true,
+                    "bridge": "70:ee:50:9c:f0:90",
+                    "ts": 1692641281,
+                    "temperature": 33.9,
+                    "humidity": 67
+                },
+                {
+                    "id": "05:00:00:0a:84:44",
+                    "type": "NAModule3",
+                    "battery_state": "full",
+                    "battery_level": 6144,
+                    "firmware_revision": 14,
+                    "rf_state": "high",
+                    "rf_strength": 67,
+                    "last_seen": 1692641326,
+                    "reachable": true,
+                    "bridge": "70:ee:50:9c:f0:90",
+                    "ts": 1692641275,
+                    "rain": 0,
+                    "sum_rain_1": 0,
+                    "sum_rain_24": 0
+                }
+            ]
+        }
+    }
+}

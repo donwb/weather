@@ -1,0 +1,149 @@
+{
+    "body": {
+        "homes": [
+            {
+                "id": "61705af4fec8eb6403586514",
+                "name": "Home",
+                "altitude": 305,
+                "coordinates": [
+                    -84.598508,
+                    33.922152
+                ],
+                "country": "US",
+                "timezone": "America/New_York",
+                "rooms": [
+                    {
+                        "id": "3781698824",
+                        "name": "Office",
+                        "type": "custom",
+                        "module_ids": [
+                            "70:ee:50:71:42:36"
+                        ]
+                    },
+                    {
+                        "id": "310942987",
+                        "name": "Porch",
+                        "type": "custom",
+                        "module_ids": [
+                            "02:00:00:71:52:36"
+                        ]
+                    }
+                ],
+                "modules": [
+                    {
+                        "id": "70:ee:50:71:42:36",
+                        "type": "NAMain",
+                        "name": "Inside",
+                        "setup_date": 1634753268,
+                        "room_id": "3781698824",
+                        "modules_bridged": [
+                            "02:00:00:71:52:36",
+                            "03:00:00:07:db:b4",
+                            "05:00:00:07:11:c6",
+                            "06:00:00:04:51:e6"
+                        ]
+                    },
+                    {
+                        "id": "02:00:00:71:52:36",
+                        "type": "NAModule1",
+                        "name": "Outside",
+                        "setup_date": 1634753268,
+                        "room_id": "310942987",
+                        "bridge": "70:ee:50:71:42:36"
+                    },
+                    {
+                        "id": "03:00:00:07:db:b4",
+                        "type": "NAModule4",
+                        "name": "Bedroom",
+                        "setup_date": 1634753522,
+                        "bridge": "70:ee:50:71:42:36"
+                    },
+                    {
+                        "id": "05:00:00:07:11:c6",
+                        "type": "NAModule3",
+                        "name": "Rain",
+                        "setup_date": 1634754260,
+                        "bridge": "70:ee:50:71:42:36"
+                    },
+                    {
+                        "id": "06:00:00:04:51:e6",
+                        "type": "NAModule2",
+                        "name": "Wind",
+                        "setup_date": 1634754345,
+                        "bridge": "70:ee:50:71:42:36"
+                    }
+                ]
+            },
+            {
+                "id": "64cb05b88237f502eb0b5949",
+                "name": "NSB",
+                "altitude": 2,
+                "coordinates": [
+                    -80.895473,
+                    29.035514
+                ],
+                "country": "US",
+                "timezone": "America/New_York",
+                "rooms": [
+                    {
+                        "id": "1028955129",
+                        "name": "Kitchen",
+                        "type": "custom",
+                        "module_ids": [
+                            "70:ee:50:9c:f0:90"
+                        ]
+                    },
+                    {
+                        "id": "2811345510",
+                        "name": "Back Porch",
+                        "type": "custom",
+                        "module_ids": [
+                            "02:00:00:a2:71:d6"
+                        ]
+                    }
+                ],
+                "modules": [
+                    {
+                        "id": "70:ee:50:9c:f0:90",
+                        "type": "NAMain",
+                        "name": "Weather Station",
+                        "setup_date": 1691026872,
+                        "room_id": "1028955129",
+                        "modules_bridged": [
+                            "02:00:00:a2:71:d6",
+                            "05:00:00:0a:84:44"
+                        ]
+                    },
+                    {
+                        "id": "02:00:00:a2:71:d6",
+                        "type": "NAModule1",
+                        "name": "Outdoor Module",
+                        "setup_date": 1691026873,
+                        "room_id": "2811345510",
+                        "bridge": "70:ee:50:9c:f0:90"
+                    },
+                    {
+                        "id": "05:00:00:0a:84:44",
+                        "type": "NAModule3",
+                        "name": "Smart Rain Gauge",
+                        "setup_date": 1691090220,
+                        "bridge": "70:ee:50:9c:f0:90"
+                    }
+                ]
+            }
+        ],
+        "user": {
+            "email": "osdev@me.com",
+            "language": "en-US",
+            "locale": "en-US",
+            "feel_like_algorithm": 1,
+            "unit_pressure": 0,
+            "unit_system": 1,
+            "unit_wind": 1,
+            "id": "6170572c8fa78013245d186d"
+        }
+    },
+    "status": "ok",
+    "time_exec": 0.02004694938659668,
+    "time_server": 1692640737
+}

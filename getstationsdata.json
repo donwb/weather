@@ -1,0 +1,119 @@
+{
+    "body": {
+        "devices": [
+            {
+                "_id": "70:ee:50:9c:f0:90",
+                "date_setup": 1691026872,
+                "last_setup": 1691026872,
+                "type": "NAMain",
+                "last_status_store": 1692640683,
+                "module_name": "Weather Station",
+                "firmware": 201,
+                "wifi_status": 52,
+                "reachable": true,
+                "co2_calibrating": false,
+                "data_type": [
+                    "Temperature",
+                    "CO2",
+                    "Humidity",
+                    "Noise",
+                    "Pressure"
+                ],
+                "place": {
+                    "altitude": 2,
+                    "city": "New Smyrna Beach",
+                    "country": "US",
+                    "timezone": "America/New_York",
+                    "location": [
+                        -80.895473,
+                        29.035514
+                    ]
+                },
+                "station_name": "NSB (Weather Station)",
+                "home_id": "64cb05b88237f502eb0b5949",
+                "home_name": "NSB",
+                "dashboard_data": {
+                    "time_utc": 1692640681,
+                    "Temperature": 23,
+                    "CO2": 1149,
+                    "Humidity": 46,
+                    "Noise": 57,
+                    "Pressure": 1018,
+                    "AbsolutePressure": 1017.8,
+                    "min_temp": 19.9,
+                    "max_temp": 23.2,
+                    "date_max_temp": 1692637955,
+                    "date_min_temp": 1692601913,
+                    "temp_trend": "stable",
+                    "pressure_trend": "up"
+                },
+                "modules": [
+                    {
+                        "_id": "02:00:00:a2:71:d6",
+                        "type": "NAModule1",
+                        "module_name": "Outdoor Module",
+                        "last_setup": 1691026873,
+                        "data_type": [
+                            "Temperature",
+                            "Humidity"
+                        ],
+                        "battery_percent": 100,
+                        "reachable": true,
+                        "firmware": 53,
+                        "last_message": 1692640679,
+                        "last_seen": 1692640666,
+                        "rf_status": 60,
+                        "battery_vp": 6074,
+                        "dashboard_data": {
+                            "time_utc": 1692640666,
+                            "Temperature": 33.7,
+                            "Humidity": 67,
+                            "min_temp": 27.3,
+                            "max_temp": 33.7,
+                            "date_max_temp": 1692640666,
+                            "date_min_temp": 1692616108,
+                            "temp_trend": "up"
+                        }
+                    },
+                    {
+                        "_id": "05:00:00:0a:84:44",
+                        "type": "NAModule3",
+                        "module_name": "Smart Rain Gauge",
+                        "last_setup": 1691090220,
+                        "data_type": [
+                            "Rain"
+                        ],
+                        "battery_percent": 100,
+                        "reachable": true,
+                        "firmware": 14,
+                        "last_message": 1692640679,
+                        "last_seen": 1692640672,
+                        "rf_status": 66,
+                        "battery_vp": 6144,
+                        "dashboard_data": {
+                            "time_utc": 1692640672,
+                            "Rain": 0,
+                            "sum_rain_1": 0,
+                            "sum_rain_24": 0
+                        }
+                    }
+                ]
+            }
+        ],
+        "user": {
+            "mail": "osdev@me.com",
+            "administrative": {
+                "lang": "en-US",
+                "reg_locale": "en-US",
+                "country": "US",
+                "unit": 1,
+                "windunit": 1,
+                "pressureunit": 0,
+                "feel_like_algo": 1
+            }
+        }
+    },
+    "status": "ok",
+    "time_exec": 0.04718303680419922,
+    "time_server": 1692641026
+}
