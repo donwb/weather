@@ -13,7 +13,7 @@ def main(config):
 
 
     # setup fonts
-    font = config.get("font", "tb-8")
+    font = config.get("font", "5x8")
     print("Using font: '{}'".format(font))
 
     #call api to get data before render
@@ -35,9 +35,10 @@ def main(config):
                         main_align="space_around",
                         cross_align="left",
                         children=[
-                            render.Text("Inside:", color="#0096FF"),
-                            render.Text("Outside:", color="#0047AB"),
-                            render.Text("Rain:", color="#3F00FF"),
+                            render.Text("Inside:"),
+                            render.Text("Outside:"),
+                            render.Text("Humidity:"),
+                            render.Text("Rain:"),
                         ]
                 ),
                 render.Column(
@@ -47,6 +48,7 @@ def main(config):
                         children=[
                             render.Text(str(weather_list["insideTemp"]), color="#7393B3"),
                             render.Text(str(weather_list["outsideTemp"]), color="#088F8F"),
+                            render.Text(str(weather_list["humidity"]), color="#088F8F"),
                             render.Text(str(weather_list["rainfall"]), color="#6495ED"),
                         ]
                 )
