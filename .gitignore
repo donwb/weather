@@ -4,3 +4,4 @@ settings.json
 run.log
 docker-env
 .DS_Store
+tidbyt-info.txt
