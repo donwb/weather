@@ -27,6 +27,8 @@ def main(config):
     weather_list = json.decode(api_response)
     print(weather_list)
 
+    insideTempColor, outsideColor, humidityColor = computeColors(weather_list["insideTemp"], weather_list["outsideTemp"], weather_list["humidity"])
+
     # render screen
     return render.Root(
         render.Row(
@@ -44,12 +46,20 @@ def main(config):
                 ),
                 render.Column(
                         expanded=True,
+                        children=[
+                            render.Box(
+                                width=4,
+                                height=10,)
+                        ],
+                ),
+                render.Column(
+                        expanded=True,
                         main_align="space_around",
                         cross_align="left",
                         children=[
-                            render.Text(str(weather_list["insideTemp"]), color="#7393B3"),
-                            render.Text(str(weather_list["outsideTemp"]), color="#088F8F"),
-                            render.Text(str(weather_list["humidity"]), color="#088F8F"),
+                            render.Text(str(weather_list["insideTemp"]), color=insideTempColor),
+                            render.Text(str(weather_list["outsideTemp"]), color=outsideColor),
+                            render.Text(str(weather_list["humidity"]), color=humidityColor),
                             render.Text(str(weather_list["rainfall"]), color="#6495ED"),
                         ]
                 )
@@ -59,5 +69,32 @@ def main(config):
 )
     
 
+def computeColors(inside, outside, humidity):
+    red = "#B81D13"
+    yellow = "EFB700"
+    green = "008450"
+
+    if inside < 70:
+        insideColor = green
+    elif inside > 70 and inside < 72:
+        insideColor = yellow
+    else:
+        insideColor = red
+
+    if outside < 80:
+        outsideColor = green
+    elif outside > 80 and outside < 90:
+        print(outside)
+        outsideColor = yellow
+    else:
+        outsideColor = red
     
-    
+    if humidity < 60:
+        humidityColor = green
+    elif humidity > 60 and humidity < 76:
+        humidityColor = yellow
+    else:
+        humidityColor = red
+
+    print(insideColor, outsideColor, humidityColor)
+    return insideColor, outsideColor, humidityColor
