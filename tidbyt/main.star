@@ -74,24 +74,25 @@ def computeColors(inside, outside, humidity):
     yellow = "EFB700"
     green = "008450"
 
-    if inside < 70:
+    if inside < 71:
         insideColor = green
-    elif inside > 70 and inside < 72:
+    elif inside >= 71 and inside <= 74:
         insideColor = yellow
     else:
         insideColor = red
 
     if outside < 80:
         outsideColor = green
-    elif outside > 80 and outside < 90:
+    elif outside >= 80 and outside <= 90:
         print(outside)
         outsideColor = yellow
     else:
         outsideColor = red
     
+    print(humidity)
     if humidity < 60:
         humidityColor = green
-    elif humidity > 60 and humidity < 76:
+    elif humidity >= 60 and humidity <= 76:
         humidityColor = yellow
     else:
         humidityColor = red
