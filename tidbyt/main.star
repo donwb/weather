@@ -17,8 +17,8 @@ def main(config):
     print("Using font: '{}'".format(font))
 
     #call api to get data before render
-    baseURL = "http://localhost:1323/current"
-    # baseURL = "https://weathersrv-hf9df.ondigitalocean.app/current"
+    # baseURL = "http://localhost:1323/current"
+    baseURL = "https://weathersrv-hf9df.ondigitalocean.app/current"
     api_result = http.get(url = baseURL)
     api_response = api_result.body()
     cache.set("temps", api_result.body(), ttl_seconds = 7200)
