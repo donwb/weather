@@ -17,8 +17,8 @@ def main(config):
     print("Using font: '{}'".format(font))
 
     #call api to get data before render
-    # baseURL = "http://localhost:1323/current"
-    baseURL = "https://weathersrv-hf9df.ondigitalocean.app/current"
+    baseURL = "http://localhost:1323/current"
+    # baseURL = "https://weathersrv-hf9df.ondigitalocean.app/current"
     api_result = http.get(url = baseURL)
     api_response = api_result.body()
     cache.set("temps", api_result.body(), ttl_seconds = 7200)
@@ -28,6 +28,8 @@ def main(config):
     print(weather_list)
 
     insideTempColor, outsideColor, humidityColor = computeColors(weather_list["insideTemp"], weather_list["outsideTemp"], weather_list["humidity"])
+
+    rainAmount = str(weather_list["rainfall"])[:4]
 
     # render screen
     return render.Root(
@@ -60,7 +62,7 @@ def main(config):
                             render.Text(str(weather_list["insideTemp"]), color=insideTempColor),
                             render.Text(str(weather_list["outsideTemp"]), color=outsideColor),
                             render.Text(str(weather_list["humidity"]), color=humidityColor),
-                            render.Text(str(weather_list["rainfall"]), color="#6495ED"),
+                            render.Text(str(rainAmount), color="#6495ED"),
                         ]
                 )
             ]
@@ -74,16 +76,16 @@ def computeColors(inside, outside, humidity):
     yellow = "EFB700"
     green = "008450"
 
-    if inside < 71:
+    if inside < 73:
         insideColor = green
-    elif inside >= 71 and inside <= 74:
+    elif inside >= 73 and inside <= 75:
         insideColor = yellow
     else:
         insideColor = red
 
-    if outside < 80:
+    if outside < 84:
         outsideColor = green
-    elif outside >= 80 and outside <= 90:
+    elif outside >= 84 and outside <= 91:
         print(outside)
         outsideColor = yellow
     else:

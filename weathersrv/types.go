@@ -1,10 +1,10 @@
 package main
 
 type CurrentWeatherInfo struct {
-	InsideTemp  int `json:"insideTemp"`
-	OutsideTemp int `json:"outsideTemp"`
-	Rainfall    int `json:"rainfall"`
-	Humidity    int `json:"humidity"`
+	InsideTemp  int     `json:"insideTemp"`
+	OutsideTemp int     `json:"outsideTemp"`
+	Rainfall    float64 `json:"rainfall"`
+	Humidity    int     `json:"humidity"`
 }
 
 type HomeStatus struct {
@@ -33,9 +33,9 @@ type HomeStatus struct {
 				LastSeen         int     `json:"last_seen,omitempty"`
 				Reachable        bool    `json:"reachable,omitempty"`
 				Bridge           string  `json:"bridge,omitempty"`
-				Rain             int     `json:"rain,omitempty"`
-				SumRain1         int     `json:"sum_rain_1,omitempty"`
-				SumRain24        int     `json:"sum_rain_24,omitempty"`
+				Rain             float64 `json:"rain,omitempty"`
+				SumRain1         float64 `json:"sum_rain_1,omitempty"`
+				SumRain24        float64 `json:"sum_rain_24,omitempty"`
 			} `json:"modules"`
 		} `json:"home"`
 	} `json:"body"`
