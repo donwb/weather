@@ -25,13 +25,10 @@ run:
 	gin
 
 docker-buildM1:
-	docker build --platform linux/amd64 -t donwb/weathersrv:0.1 .
+	docker build --platform linux/amd64 -t donwb/weathersrv:0.2 .
 
-
-docker-build:
-	docker build -t donwb/videowall:0.1 .
 
 docker-run:
-	docker run --env-file=docker-env -p 80:1323 -it donwb/weathersrv:0.1
+	docker run --env-file=docker-env -p 80:1323 -it donwb/weathersrv:0.2
 
 .DEFAULT_GOAL := all
