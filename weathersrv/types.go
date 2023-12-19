@@ -5,6 +5,7 @@ type CurrentWeatherInfo struct {
 	OutsideTemp int     `json:"outsideTemp"`
 	Rainfall    float64 `json:"rainfall"`
 	Humidity    int     `json:"humidity"`
+	Co2         int     `json:"co2"`
 }
 
 type HomeStatus struct {

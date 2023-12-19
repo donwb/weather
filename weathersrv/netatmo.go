@@ -83,6 +83,7 @@ func getWeather() CurrentWeatherInfo {
 
 	insideTemp := homeStatus.Body.Home.Modules[0].Temperature
 	outsideTemp := homeStatus.Body.Home.Modules[1].Temperature
+	co2 := homeStatus.Body.Home.Modules[0].Co2
 
 	// reported in milimeters by netatmo
 	rain := homeStatus.Body.Home.Modules[2].SumRain24
@@ -97,6 +98,7 @@ func getWeather() CurrentWeatherInfo {
 		InsideTemp:  celsiusToFahrenheit(insideTemp),
 		Rainfall:    rain,
 		Humidity:    humidity,
+		Co2:         co2,
 	}
 
 	return *returnTemp

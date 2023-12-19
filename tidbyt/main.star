@@ -27,9 +27,10 @@ def main(config):
     weather_list = json.decode(api_response)
     print(weather_list)
 
-    insideTempColor, outsideColor, humidityColor = computeColors(weather_list["insideTemp"], weather_list["outsideTemp"], weather_list["humidity"])
+    insideTempColor, outsideColor, humidityColor, co2color = computeColors(weather_list["insideTemp"], weather_list["outsideTemp"], weather_list["humidity"], weather_list["co2"])
 
     rainAmount = str(weather_list["rainfall"])[:4]
+    co2 = str(weather_list["co2"])[:5]
 
     # render screen
     return render.Root(
@@ -43,7 +44,7 @@ def main(config):
                             render.Text("Inside:"),
                             render.Text("Outside:"),
                             render.Text("Humidity:"),
-                            render.Text("Rain:"),
+                            render.Text("Air Qlty:"),
                         ]
                 ),
                 render.Column(
@@ -62,7 +63,7 @@ def main(config):
                             render.Text(str(weather_list["insideTemp"]), color=insideTempColor),
                             render.Text(str(weather_list["outsideTemp"]), color=outsideColor),
                             render.Text(str(weather_list["humidity"]), color=humidityColor),
-                            render.Text(str(rainAmount), color="#6495ED"),
+                            render.Text(str(co2), color=co2color),
                         ]
                 )
             ]
@@ -71,7 +72,7 @@ def main(config):
 )
     
 
-def computeColors(inside, outside, humidity):
+def computeColors(inside, outside, humidity, co2):
     red = "#B81D13"
     yellow = "EFB700"
     green = "008450"
@@ -99,5 +100,12 @@ def computeColors(inside, outside, humidity):
     else:
         humidityColor = red
 
-    print(insideColor, outsideColor, humidityColor)
-    return insideColor, outsideColor, humidityColor
+    if co2 < 800:
+        co2Color = green
+    elif co2 >= 800 and co2 <= 1200:
+        co2Color = yellow
+    else:
+        co2Color = red
+
+    print(insideColor, outsideColor, humidityColor, co2Color)
+    return insideColor, outsideColor, humidityColor, co2Color
