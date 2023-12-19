@@ -100,9 +100,9 @@ def computeColors(inside, outside, humidity, co2):
     else:
         humidityColor = red
 
-    if co2 < 800:
+    if co2 < 1000:
         co2Color = green
-    elif co2 >= 800 and co2 <= 1200:
+    elif co2 >= 1000 and co2 <= 1500:
         co2Color = yellow
     else:
         co2Color = red
