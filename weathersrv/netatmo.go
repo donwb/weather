@@ -20,6 +20,9 @@ func refreshToken() bool {
 		"client_id":     {clientID},
 		"client_secret": {clientSecret},
 	}
+
+	fmt.Println("Post data: ", postData)
+
 	encodedPostData := postData.Encode()
 	req, err := http.NewRequest("POST", netatmoOauthURL, strings.NewReader(encodedPostData))
 	checkError(err, "ERROR: Constructing HTTP request")
@@ -35,9 +38,11 @@ func refreshToken() bool {
 	resBytes, err := ioutil.ReadAll(resBody)
 	checkError(err, "ERROR: reading request")
 
+	//fmt.Println("Response: ", string(resBytes))
+
 	var authRefreshStatus AuthRefresh
 	err = json.Unmarshal(resBytes, &authRefreshStatus)
-	checkError(err, "error unmarshalling request")
+	checkError(err, "ERROR: unmarshalling request")
 
 	fmt.Println("Returned token: ", authRefreshStatus.AccessToken)
 	if btoken != authRefreshStatus.AccessToken {
@@ -65,6 +70,7 @@ func getWeather() CurrentWeatherInfo {
 	req, err := http.NewRequest("GET", urlWithParams, nil)
 	checkError(err, "error creating request")
 
+	fmt.Println("Bearer: ", btoken)
 	req.Header.Set("Authorization", "Bearer "+btoken)
 
 	res, err := client.Do(req)
@@ -79,8 +85,13 @@ func getWeather() CurrentWeatherInfo {
 	err = json.Unmarshal(resBody, &homeStatus)
 	checkError(err, "error unmarshalling request")
 
-	fmt.Println(string(resBody))
-
+	returnString := string(resBody)
+	hasError := strings.Contains(returnString, "error")
+	if hasError {
+		fmt.Println("Error in response: ", returnString)
+		emptyReturnTemp := &CurrentWeatherInfo{}
+		return *emptyReturnTemp
+	}
 	insideTemp := homeStatus.Body.Home.Modules[0].Temperature
 	outsideTemp := homeStatus.Body.Home.Modules[1].Temperature
 	co2 := homeStatus.Body.Home.Modules[0].Co2
@@ -102,4 +113,5 @@ func getWeather() CurrentWeatherInfo {
 	}
 
 	return *returnTemp
+
 }
