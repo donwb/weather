@@ -25,10 +25,10 @@ run:
 	gin
 
 docker-buildM1:
-	docker build --platform linux/amd64 -t donwb/weathersrv:0.4 .
+	docker build --platform linux/amd64 -t donwb/weathersrv:0.45 .
 
 
 docker-run:
-	docker run --platform linux/amd64 --env-file=docker-env -p 80:1323 -it donwb/weathersrv:0.4
+	docker run --platform linux/amd64 --env-file=docker-env -p 80:1323 -it donwb/weathersrv:0.45
 
 .DEFAULT_GOAL := all
