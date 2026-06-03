@@ -1,18 +1,16 @@
 package main
 
-import "fmt"
+import "log"
 
-func checkError(err error, msg string) {
+// logError logs a non-fatal error. Unlike the old checkError, it never
+// panics, so a transient network or parse failure no longer takes down
+// the whole server.
+func logError(err error, msg string) {
 	if err != nil {
-		fmt.Println("--------------------")
-		fmt.Println("PANIC: ", msg)
-		panic(err)
+		log.Printf("ERROR: %s: %v", msg, err)
 	}
 }
 
 func celsiusToFahrenheit(celsius float64) int {
-	calc := (celsius * 9 / 5) + 32
-
-	return int(calc)
-
+	return int((celsius * 9 / 5) + 32)
 }

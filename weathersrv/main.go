@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"io"
+	"log"
 	"os"
 	"text/template"
 
@@ -11,8 +11,6 @@ import (
 
 var homeID string
 var deviceID string
-var btoken string
-var rtoken string
 var clientID string
 var clientSecret string
 var authRedirectURL string
@@ -38,24 +36,24 @@ func main() {
 func setupEnvVars() {
 	homeID = os.Getenv("HOMEID")
 	deviceID = os.Getenv("DEVICEID")
-	btoken = os.Getenv("BTOKEN")
-	rtoken = os.Getenv("RTOKEN")
 	clientID = os.Getenv("CLIENTID")
 	clientSecret = os.Getenv("CLIENTSECRET")
 	authRedirectURL = os.Getenv("AUTHREDIRECT")
 
-	// Clearning these out for now, will remove from envvars later
-	btoken = ""
-	rtoken = ""
+	tokenFile := os.Getenv("TOKENFILE")
+	if tokenFile == "" {
+		tokenFile = "tokens.json"
+	}
+	tokens = newTokenStore(tokenFile)
+	tokens.bootstrap(os.Getenv("BTOKEN"), os.Getenv("RTOKEN"))
 
-	fmt.Println("\n\n-------- ENVVARS ------------")
-	fmt.Println("HomeID: ", homeID)
-	fmt.Println("DeviceID:", deviceID)
-	fmt.Println("Bearer:", btoken)
-	fmt.Println("Refresh", rtoken)
-	fmt.Println("Client:", clientID)
-	fmt.Println("Secret", clientSecret)
-	fmt.Println("Auth Redirect: ", authRedirectURL)
+	log.Println("-------- CONFIG ------------")
+	log.Println("HomeID:       ", homeID)
+	log.Println("DeviceID:     ", deviceID)
+	log.Println("ClientID:     ", clientID)
+	log.Println("Auth Redirect:", authRedirectURL)
+	log.Println("Token file:   ", tokenFile)
+	log.Println("Have refresh token:", tokens.snapshot().RefreshToken != "")
 }
 
 type Template struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -12,106 +12,118 @@ import (
 const netatmoURL = "https://api.netatmo.com/api/"
 const netatmoOauthURL = "https://api.netatmo.com/oauth2/token"
 
-func refreshToken() bool {
+// ensureToken refreshes the access token only when it's missing or near expiry,
+// avoiding a refresh (and a refresh-token rotation) on every single request.
+func ensureToken() error {
+	if !tokens.expired() {
+		return nil
+	}
+	return refreshToken()
+}
+
+func refreshToken() error {
+	cur := tokens.snapshot()
+	if cur.RefreshToken == "" {
+		return fmt.Errorf("no refresh token available; visit / to authorize")
+	}
 
 	postData := url.Values{
 		"grant_type":    {"refresh_token"},
-		"refresh_token": {rtoken},
+		"refresh_token": {cur.RefreshToken},
 		"client_id":     {clientID},
 		"client_secret": {clientSecret},
 	}
 
-	fmt.Println("Post data: ", postData)
-
-	encodedPostData := postData.Encode()
-	req, err := http.NewRequest("POST", netatmoOauthURL, strings.NewReader(encodedPostData))
-	checkError(err, "ERROR: Constructing HTTP request")
+	req, err := http.NewRequest("POST", netatmoOauthURL, strings.NewReader(postData.Encode()))
+	if err != nil {
+		return fmt.Errorf("building refresh request: %w", err)
+	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	client := &http.Client{}
-	res, err := client.Do(req)
-	checkError(err, "ERROR: Making request")
-
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("refresh request failed: %w", err)
+	}
 	defer res.Body.Close()
 
-	resBody := res.Body
-	resBytes, err := ioutil.ReadAll(resBody)
-	checkError(err, "ERROR: reading request")
-
-	//fmt.Println("Response: ", string(resBytes))
-
-	var authRefreshStatus AuthRefresh
-	err = json.Unmarshal(resBytes, &authRefreshStatus)
-	checkError(err, "ERROR: unmarshalling request")
-
-	fmt.Println("Returned token: ", authRefreshStatus.AccessToken)
-	if btoken != authRefreshStatus.AccessToken {
-		btoken = authRefreshStatus.AccessToken
-		rtoken = authRefreshStatus.RefreshToken
-		fmt.Println("Refreshed access token to: ", btoken)
-		return true
-	} else {
-		fmt.Println("No change in access token, continuing.... ")
-		return false
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return fmt.Errorf("reading refresh response: %w", err)
+	}
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("refresh returned HTTP %d: %s", res.StatusCode, string(body))
 	}
 
+	var ar AuthRefresh
+	if err := json.Unmarshal(body, &ar); err != nil {
+		return fmt.Errorf("parsing refresh response: %w", err)
+	}
+	if ar.AccessToken == "" {
+		return fmt.Errorf("refresh response had no access token: %s", string(body))
+	}
+
+	tokens.set(ar.AccessToken, ar.RefreshToken, ar.ExpiresIn)
+	return nil
 }
 
-func getWeather() CurrentWeatherInfo {
-
+func getWeather() (CurrentWeatherInfo, error) {
 	queryParams := url.Values{
 		"device_id": {deviceID},
 		"home_id":   {homeID},
 	}
-	homeStationURL := netatmoURL + "homestatus"
-	urlWithParams := homeStationURL + "?" + queryParams.Encode()
+	urlWithParams := netatmoURL + "homestatus?" + queryParams.Encode()
 
-	client := &http.Client{}
 	req, err := http.NewRequest("GET", urlWithParams, nil)
-	checkError(err, "error creating request")
+	if err != nil {
+		return CurrentWeatherInfo{}, fmt.Errorf("building homestatus request: %w", err)
+	}
+	req.Header.Set("Authorization", "Bearer "+tokens.snapshot().AccessToken)
 
-	fmt.Println("Bearer: ", btoken)
-	req.Header.Set("Authorization", "Bearer "+btoken)
-
-	res, err := client.Do(req)
-	checkError(err, "err making request")
-
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return CurrentWeatherInfo{}, fmt.Errorf("homestatus request failed: %w", err)
+	}
 	defer res.Body.Close()
 
-	resBody, err := ioutil.ReadAll(res.Body)
-	checkError(err, "error reading request")
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return CurrentWeatherInfo{}, fmt.Errorf("reading homestatus response: %w", err)
+	}
+	if res.StatusCode != http.StatusOK {
+		return CurrentWeatherInfo{}, fmt.Errorf("homestatus returned HTTP %d: %s", res.StatusCode, string(body))
+	}
 
 	var homeStatus HomeStatus
-	err = json.Unmarshal(resBody, &homeStatus)
-	checkError(err, "error unmarshalling request")
-
-	returnString := string(resBody)
-	hasError := strings.Contains(returnString, "error")
-	if hasError {
-		fmt.Println("Error in response: ", returnString)
-		emptyReturnTemp := &CurrentWeatherInfo{}
-		return *emptyReturnTemp
+	if err := json.Unmarshal(body, &homeStatus); err != nil {
+		return CurrentWeatherInfo{}, fmt.Errorf("parsing homestatus response: %w", err)
 	}
-	insideTemp := homeStatus.Body.Home.Modules[0].Temperature
-	outsideTemp := homeStatus.Body.Home.Modules[1].Temperature
-	co2 := homeStatus.Body.Home.Modules[0].Co2
-
-	// reported in milimeters by netatmo
-	rain := homeStatus.Body.Home.Modules[2].SumRain24
-	if rain > 0 {
-		rain = rain / 25.4
+	if homeStatus.Status != "ok" {
+		return CurrentWeatherInfo{}, fmt.Errorf("netatmo status %q: %s", homeStatus.Status, string(body))
 	}
 
-	humidity := homeStatus.Body.Home.Modules[1].Humidity
+	return extractWeather(homeStatus), nil
+}
 
-	returnTemp := &CurrentWeatherInfo{
-		OutsideTemp: celsiusToFahrenheit(outsideTemp),
-		InsideTemp:  celsiusToFahrenheit(insideTemp),
-		Rainfall:    rain,
-		Humidity:    humidity,
-		Co2:         co2,
+// extractWeather maps modules by their reported type rather than array
+// position, so an offline/reordered/missing module degrades gracefully
+// (zeroed field) instead of panicking on a bad index.
+func extractWeather(hs HomeStatus) CurrentWeatherInfo {
+	var info CurrentWeatherInfo
+	for _, m := range hs.Body.Home.Modules {
+		switch m.Type {
+		case "NAMain": // indoor base station
+			info.InsideTemp = celsiusToFahrenheit(m.Temperature)
+			info.Co2 = m.Co2
+		case "NAModule1": // outdoor temperature/humidity
+			info.OutsideTemp = celsiusToFahrenheit(m.Temperature)
+			info.Humidity = m.Humidity
+		case "NAModule3": // rain gauge, reported in mm -> convert to inches
+			rain := m.SumRain24
+			if rain > 0 {
+				rain = rain / 25.4
+			}
+			info.Rainfall = rain
+		}
 	}
-
-	return *returnTemp
-
+	return info
 }
