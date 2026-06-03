@@ -1,5 +1,7 @@
 .env
 env
+tokens.json
+tokens.json.tmp
 settings.json
 run.log
 docker-env

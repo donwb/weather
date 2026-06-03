@@ -19,10 +19,29 @@ def main(config):
     #call api to get data before render
     # baseURL = "http://localhost:1323/current"
     baseURL = "https://weathersrv-hf9df.ondigitalocean.app/current"
-    api_result = http.get(url = baseURL)
-    api_response = api_result.body()
-    cache.set("temps", api_result.body(), ttl_seconds = 7200)
 
+    # Fetch fresh data; only trust + cache a well-formed success response.
+    # On any failure fall back to the last good reading so the display
+    # keeps showing data instead of crashing the render.
+    api_response = None
+    api_result = http.get(url = baseURL)
+    if api_result.status_code == 200:
+        body = api_result.body()
+        decoded = json.decode(body, default = None)
+        if decoded != None and "insideTemp" in decoded:
+            api_response = body
+            cache.set("temps", body, ttl_seconds = 7200)
+
+    if api_response == None:
+        api_response = cache.get("temps")
+
+    if api_response == None:
+        return render.Root(
+            child = render.WrappedText(
+                content = "Weather unavailable",
+                font = font,
+            ),
+        )
 
     weather_list = json.decode(api_response)
     print(weather_list)
@@ -74,8 +93,8 @@ def main(config):
 
 def computeColors(inside, outside, humidity, co2):
     red = "#B81D13"
-    yellow = "EFB700"
-    green = "008450"
+    yellow = "#EFB700"
+    green = "#008450"
 
     if inside < 73:
         insideColor = green
